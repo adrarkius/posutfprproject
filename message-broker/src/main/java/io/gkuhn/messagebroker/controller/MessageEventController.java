@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import io.gkuhn.messagebroker.dao.MessageEventRepository;
 import io.gkuhn.messagebroker.model.ConfirmMessageEvent;
 import io.gkuhn.messagebroker.model.MessageEvent;
-import io.gkuhn.messagebroker.model.Response;
+import io.gkuhn.messagebroker.model.ResponseMessageEvent;
 
 @Controller
 @RequestMapping(path="/message")
@@ -26,19 +26,25 @@ public class MessageEventController {
 	private MessageEventRepository messageRepository;
 	
 	@RequestMapping(path="/user/{userId}", produces="application/json", method=RequestMethod.GET)
-	public @ResponseBody List<MessageEvent> getByUser(@PathVariable(value="userId", required = true)int id) {
-		List<MessageEvent> result = new ArrayList<>();
-		result = messageRepository.findByToAndReceived(id, false);
-		return result;
+	public @ResponseBody ResponseMessageEvent getByUser(@PathVariable(value="userId", required = true)int id) {
+		List<MessageEvent> responseMessages = new ArrayList<>();
+		ResponseMessageEvent response = new ResponseMessageEvent("No message found", responseMessages);
+		responseMessages = messageRepository.findByToAndReceived(id, false);
+		if(responseMessages.size() > 0) {
+			response.setStatus("Messages available");
+			response.setMessages(responseMessages);
+		}
+	
+		return response;
 	}
 	
 	@RequestMapping(value="/", consumes="application/json", method=RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Response> sendMessage(@RequestBody List<MessageEvent> messages) {
+	public @ResponseBody ResponseEntity<ResponseMessageEvent> sendMessage(@RequestBody List<MessageEvent> messages) {
 		messages.forEach(t-> t.setMessageid(0));
 		messages.forEach(t-> t.setReceived(false));
 		messages.forEach(t-> t.setSenttime(new Date()));
 		messageRepository.save(messages);
-		return (new ResponseEntity<Response>(new Response("message sent"), HttpStatus.CREATED));
+		return (new ResponseEntity<ResponseMessageEvent>(new ResponseMessageEvent("message sent", new ArrayList<>()), HttpStatus.CREATED));
 	}
 	
 	@RequestMapping(value="/confirm", consumes="application/json", method=RequestMethod.POST)

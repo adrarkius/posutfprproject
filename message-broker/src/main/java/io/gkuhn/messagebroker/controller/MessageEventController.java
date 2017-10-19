@@ -29,7 +29,8 @@ public class MessageEventController {
 	public @ResponseBody ResponseMessageEvent getByUser(@PathVariable(value="userId", required = true)int id) {
 		List<MessageEvent> responseMessages = new ArrayList<>();
 		ResponseMessageEvent response = new ResponseMessageEvent("No message found", responseMessages);
-		responseMessages = messageRepository.findByToAndReceived(id, false);
+		responseMessages.addAll(messageRepository.findByToAndReceived(id, false));
+		
 		if(responseMessages.size() > 0) {
 			response.setStatus("Messages available");
 			response.setMessages(responseMessages);
@@ -43,8 +44,10 @@ public class MessageEventController {
 		messages.forEach(t-> t.setMessageid(0));
 		messages.forEach(t-> t.setReceived(false));
 		messages.forEach(t-> t.setSenttime(new Date()));
-		messageRepository.save(messages);
-		return (new ResponseEntity<ResponseMessageEvent>(new ResponseMessageEvent("message sent", new ArrayList<>()), HttpStatus.CREATED));
+		List<MessageEvent> messageListReturn = messageRepository.save(messages);
+		ResponseMessageEvent response = new ResponseMessageEvent("message sent", messageListReturn);
+		
+		return (new ResponseEntity<ResponseMessageEvent>(response, HttpStatus.CREATED));
 	}
 	
 	@RequestMapping(value="/confirm", consumes="application/json", method=RequestMethod.POST)

@@ -31,14 +31,18 @@ public class MessageEvent {
 	@Column(name="`received`")
 	private boolean received;
 	
+	@Column(name="`userMessageId`")
+	private Integer userMessageId;
 	
 	
-	public MessageEvent(int from, int to, Date senttime, String message, boolean received) {
+	
+	public MessageEvent(int from, int to, Date senttime, String message, boolean received, Integer userMessageId) {
 		this.from = from;
 		this.to = to;
 		this.senttime = senttime;
 		this.message = message;
 		this.received = received;
+		this.userMessageId = userMessageId;
 	}
 	
 	public MessageEvent() { }
@@ -82,6 +86,11 @@ public class MessageEvent {
 	public void setReceived(boolean received) {
 		this.received = received;
 	}
-	
+	public Integer getUserMessageId() {
+		return userMessageId;
+	}
+	public void setUserMessageId(Integer userMessageId) {
+		this.userMessageId = userMessageId;
+	}
 	
 }

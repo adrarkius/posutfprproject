@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    
+    <LinearLayout 
+        android:id="@+id/fromMessage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="100dp"
+        android:background="@drawable/textview"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:orientation="vertical">
+        
+	        <TextView
+		        android:id="@+id/from"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="12sp"
+		        android:text="Sample"
+		        android:textColor="#FF0000" />
+	        
+	        
+			 <TextView
+				android:id="@+id/message"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Sample"
+				android:textColor="#000" />
+        
+    </LinearLayout>
+    
+    <TextView
+		android:id="@+id/senttime"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Sample"
+		android:textColor="@color/DimGray" 
+		android:layout_alignRight="@id/fromMessage"
+		android:layout_alignTop="@id/fromMessage"
+		/>
+    
+</RelativeLayout>

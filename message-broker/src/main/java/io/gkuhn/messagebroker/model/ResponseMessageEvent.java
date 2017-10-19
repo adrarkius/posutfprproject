@@ -29,5 +29,4 @@ public class ResponseMessageEvent {
 	public void setMessages(List<MessageEvent> messages) {
 		this.messages = messages;
 	}
-
 }

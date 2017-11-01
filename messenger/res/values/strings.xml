@@ -8,7 +8,13 @@
     <string name="logar">Logar</string>
     <string name="spinner_prompt">Select a number:</string>
     <string name="conversa_com">Conversa com </string>
-     <string name="insira_mensagem">Escreva uma mensagem</string>
+    <string name="insira_mensagem">Escreva uma mensagem</string>
+    <string name="new_user_str">Novo Usuário</string>
+    <string name="user_name_str">Nome do usuário:</string>
+    <string name="user_password_str">Senha:</string>
+    <string name="user_confirmpassword_str">Confirmar Senha:</string>
+    <string name="user_register_str">Registrar</string>
+      
     
     
     <string-array name="number_arrays">

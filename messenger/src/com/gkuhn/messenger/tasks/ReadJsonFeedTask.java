@@ -50,7 +50,7 @@ public class ReadJsonFeedTask extends AsyncTask
 			HttpParams httpParameters = new BasicHttpParams();
 			// Set the timeout in milliseconds until a connection is established.
 			// The default value is zero, that means the timeout is not used. 
-			int timeoutConnection = 3000;
+			int timeoutConnection = 5000;
 			HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
 			
 			
@@ -72,12 +72,13 @@ public class ReadJsonFeedTask extends AsyncTask
 	                    stringBuilder.append(line);
 	                }
 	                inputStream.close();
+	                
+	                result = stringBuilder.toString();
 	            } else {
 	  
 	                Log.d("JSON", "Failed to download file");
 	            }
 	            
-	            result = URLDecoder.decode(stringBuilder.toString(), "UTF-8");
 	        } catch (Exception e) {
 	            Log.d("readJSONFeed", e.getLocalizedMessage());
 	            Log.d("readJsonFeed", result);
@@ -127,13 +128,11 @@ public class ReadJsonFeedTask extends AsyncTask
 	                    String senttime = messageItem.getString("senttime");
 	                    String received = messageItem.getString("received");
 	                    
+	                    message = URLDecoder.decode(message, "UTF-8");
+	                    
 	                    MessageEvent messageObj = new MessageEvent(messageid, usermessageid, Integer.parseInt(from),
 	                    		Integer.parseInt(to), message, senttime, Boolean.parseBoolean(received));
 	                    
-	                    
-	                    
-	                    
-	       
 	                    
 	                   Activity origin = (Activity) context;
 	                   
@@ -151,7 +150,7 @@ public class ReadJsonFeedTask extends AsyncTask
 	                    //ChatRoom existChatRoom = dbChatRoom.getRoomByOwnerAndGuest(userId, messageObj.get_from());
 	                    
 	       
-	                    	ChatRoom chatRoom = new ChatRoom((userId*10)+messageObj.get_from(), userId, messageObj.get_from(), messageObj.get_message() );
+	                    	ChatRoom chatRoom = new ChatRoom((userId*10)+messageObj.get_from(), userId, messageObj.get_from(), messageObj.get_from()+": "+messageObj.get_message() );
 	                    	dbChatRoom.addChatRoom(chatRoom);
 	                   
                     }

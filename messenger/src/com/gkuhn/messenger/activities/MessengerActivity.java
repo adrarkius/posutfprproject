@@ -10,11 +10,11 @@ import java.util.TimerTask;
 import com.gkuhn.messenger.R;
 import com.gkuhn.messenger.adapter.MessageArrayAdapter;
 import com.gkuhn.messenger.model.MessageEvent;
-import com.gkuhn.messenger.model.PostMessage;
 import com.gkuhn.messenger.tasks.AddMessageTask;
-import com.gkuhn.messenger.tasks.PostMessageTask;
 import com.gkuhn.messenger.tasks.ReadJsonFeedTask;
 import com.gkuhn.messenger.tasks.ReadMessagesByChatFromDbTask;
+import com.gkuhn.messenger.tasks.SendMessageTask;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
@@ -28,7 +28,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MessengerActivity extends Activity {
 	private static final String URL = "http://gustavo14779.cloudapp.net:8080/message/user/";
@@ -42,8 +41,13 @@ public class MessengerActivity extends Activity {
 	private Button sendMessageBtn;
 	private EditText sendMessageTxt;
 	
+	SendMessageTask sendTask;
 	ReadJsonFeedTask newTask;
 	ReadMessagesByChatFromDbTask readMessageTask;
+	
+	Timer timerReadDataBase;
+	Timer timerReadAndPostWebService;
+	Timer timerPostWebService;
 	
 	private TextWatcher textWatcher = new TextWatcher() {
 		@Override
@@ -80,10 +84,18 @@ public class MessengerActivity extends Activity {
 	
 	
 	private void readWebService(String user){   
-		newTask = new ReadJsonFeedTask(this, Integer.parseInt(user));
+		newTask = new ReadJsonFeedTask(this, Integer.parseInt(user)) {
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				sendTask = new SendMessageTask(MessengerActivity.this);
+				sendTask.execute();
+			}
+		};
 		newTask.execute(URL+user); 
          
 	}
+	
 	
 	private void readDb(String user) {
 	        readMessageTask = new ReadMessagesByChatFromDbTask(MessengerActivity.this, messages, params, messageList) {
@@ -164,18 +176,9 @@ public class MessengerActivity extends Activity {
         		  MessageEvent newMessage = new MessageEvent(0, 0, Integer.parseInt(from), Integer.parseInt(to), messageStr, String.valueOf(new Timestamp(System.currentTimeMillis()).getTime()), false);
         		  MessageEvent newMessageResponse = new MessageEvent();
         		  
-        		  AddMessageTask addMessageTask = new AddMessageTask(MessengerActivity.this, newMessageResponse) {
-        			  @Override 
-        			  protected void onPostExecute(MessageEvent message) {
-        				  super.onPostExecute(message);
-        				  PostMessage postMessage = new PostMessage(message.get_from(), message.get_to(), message.get_usermessageid(), message.get_message());
-        				  PostMessageTask postMessageTask = new PostMessageTask(MessengerActivity.this);
-                		  postMessageTask.execute(postMessage);
-        			  }
-        		  };
+        		  AddMessageTask addMessageTask = new AddMessageTask(MessengerActivity.this, newMessageResponse);
         		  addMessageTask.execute(newMessage);
         		  
-        		  Toast.makeText(MessengerActivity.this, String.valueOf(newMessageResponse.get_usermessageid()), Toast.LENGTH_LONG).show();
         		  
         		  sendMessageTxt.setText("");
         		  
@@ -187,7 +190,7 @@ public class MessengerActivity extends Activity {
     private void setRepeatingReadWebServiceAsyncTask() {
 
         final Handler handler = new Handler();
-        Timer timer = new Timer();
+        timerReadAndPostWebService = new Timer();
 
         TimerTask task = new TimerTask() {       
             @Override
@@ -197,6 +200,7 @@ public class MessengerActivity extends Activity {
                         try {
                         	String user = params.get("user");
                         	readWebService(user);
+                        	
                         
                         } catch (Exception e) {
                             // error, do something
@@ -205,15 +209,17 @@ public class MessengerActivity extends Activity {
                 });
             }
         };
-
-        timer.schedule(task, 0, 5*1000);  // interval of one minute
+        
+        timerReadAndPostWebService.schedule(task, 0, 10*1000);  // interval of one minute
 
     }
+    
+    
     
     private void setRepeatingReadDbAsyncTask() {
 
         final Handler handler = new Handler();
-        Timer timer = new Timer();
+        timerReadDataBase = new Timer();
 
         TimerTask task = new TimerTask() {       
             @Override
@@ -232,7 +238,7 @@ public class MessengerActivity extends Activity {
             }
         };
 
-        timer.schedule(task, 0, 2*1000);  // interval of one minute
+        timerReadDataBase.schedule(task, 0, 2*1000);  // interval of one minute
 
     }
     
@@ -264,4 +270,8 @@ public class MessengerActivity extends Activity {
 
     }
     
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    }
 }

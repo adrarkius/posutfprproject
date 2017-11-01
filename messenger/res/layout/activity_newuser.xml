@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+   
+    
+    <RelativeLayout
+        android:id="@+id/newuser_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    	<TextView
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="@string/new_user_str"
+    	    android:textSize="30sp" />
+    </RelativeLayout>
+   
+   <RelativeLayout
+        android:id="@+id/newuser_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newuser_header"
+       >
+        
+        
+        <TextView
+		    android:id="@+id/newuser_txtView_username"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:paddingTop="25dp"
+		    android:text="@string/user_name_str"
+		    />
+        
+        <EditText
+		    android:id="@+id/newuser_edtTxt_username"
+		    android:layout_width="fill_parent"
+		    android:layout_height="35sp"
+		    android:background="@drawable/rounded_bg"
+		    android:gravity="center"
+		    android:layout_below="@id/newuser_txtView_username"
+		    android:inputType="text"
+		    />
+        
+        <TextView
+		    android:id="@+id/newuser_txtView_userpassword"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/newuser_txtView_username"
+		    android:paddingTop="50dp"
+		    android:text="@string/user_password_str"/>
+        
+        <EditText
+		    android:id="@+id/newuser_edtTxt_userpassword"
+		    android:layout_width="fill_parent"
+		    android:layout_height="35sp"
+		    android:background="@drawable/rounded_bg"
+		    android:gravity="center"
+		    android:layout_below="@id/newuser_txtView_userpassword"
+		    android:inputType="textPassword"
+		    />
+        
+        <TextView
+		    android:id="@+id/newuser_txtView_userconfirmpassword"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/newuser_edtTxt_userpassword"
+		    android:paddingTop="20dp"
+		    android:text="@string/user_confirmpassword_str"/>
+        
+        <EditText
+		    android:id="@+id/newuser_edtTxt_confirmuserpassword"
+		    android:layout_width="fill_parent"
+		    android:layout_height="35sp"
+		    android:background="@drawable/rounded_bg"
+		    android:gravity="center"
+		    android:layout_below="@id/newuser_txtView_userconfirmpassword"
+		    android:inputType="textPassword"
+		    />
+        
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            
+            android:paddingTop="30sp"
+            android:layout_below="@id/newuser_edtTxt_confirmuserpassword">
+            
+            <TextView
+                android:id="@+id/newUser_txtView_message"
+                android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textColor="@color/Red" />
+            <Button
+	            android:id="@+id/newUser_button_register"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/rounded_bg"
+	            android:layout_marginLeft="1sp"
+	            android:paddingLeft="5sp"
+	            android:paddingRight="5sp"
+	            android:text="@string/user_register_str"/>
+        
+        </LinearLayout>
+        
+
+            "
+    </RelativeLayout>
+	
+    
+
+</RelativeLayout>

@@ -66,9 +66,9 @@ public class ConfirmMessageTask extends AsyncTask<List<ConfirmMessage>, Void, St
 	            
 	            String r = stringBuilder.toString();
 	            
-	            Log.d("JSON",r);
+	            Log.d("ConfirmMessageTask",r);
         } catch (Exception e) {
-            Log.d("postdata", e.getLocalizedMessage());          
+            Log.d("ConfirmMessageTask", e.getLocalizedMessage());          
         }        
 	}
 }

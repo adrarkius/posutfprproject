@@ -3,6 +3,7 @@ package com.gkuhn.messenger.tasks;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +20,18 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.gkuhn.messenger.dao.DatabaseHandlerMessage;
 import com.gkuhn.messenger.model.MessageEvent;
 import com.gkuhn.messenger.model.PostMessage;
 import com.google.gson.Gson;
 
-public class PostMessageTask extends AsyncTask<PostMessage, Void, MessageEvent>{
+public class PostMessageTask extends AsyncTask<List<PostMessage>, Void, List<MessageEvent>>{
 	private static final String URL = "http://gustavo14779.cloudapp.net:8080/message/";
-	ProgressDialog progDailog;
 	private Context context;
 	
 	public PostMessageTask(Context context) {
@@ -46,45 +42,41 @@ public class PostMessageTask extends AsyncTask<PostMessage, Void, MessageEvent>{
 	 @Override
      protected void onPreExecute() {
          super.onPreExecute();
-         progDailog = new ProgressDialog(context);
-         progDailog.setMessage("Enviando mensagem...");
-         progDailog.setIndeterminate(false);
-         progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-         progDailog.setCancelable(true);
-         progDailog.show();
+   
      }
 	 
 	@Override
-	protected MessageEvent doInBackground(PostMessage ...postMessages) {
+	protected List<MessageEvent> doInBackground(List<PostMessage> ...postMessagesList) {
 		DatabaseHandlerMessage db = new DatabaseHandlerMessage(context);
-		MessageEvent response = new MessageEvent();
+		List<MessageEvent> messageListResponse = new ArrayList<MessageEvent>();
 		
 		try {
 		
-			PostMessage post = postMessages[0];
+			List<PostMessage> postList = postMessagesList[0];
 			
-			post.setMessage(URLEncoder.encode(post.getMessage(), HTTP.UTF_8));
-			
-			List<PostMessage> postMessageList = new ArrayList<PostMessage>();
-			
-			postMessageList.add(post);
+			for(PostMessage post : postList) {
+				post.setMessage(URLEncoder.encode(post.getMessage(), HTTP.UTF_8));
+			}
 			
 			Gson gson = new Gson();
 			
 			
-			String marshelledConfirmList = gson.toJson(postMessageList);
+			String marshelledConfirmList = gson.toJson(postList);
 		
 		
 			//String encodedMarshelledConfirmList = URLEncoder.encode(marshelledConfirmList, HTTP.UTF_16);
 		
 			String r = postdata(marshelledConfirmList);
 		
-			response = confirmSentMessage(r);
+			messageListResponse = confirmSentMessage(r);
 		
 
 			
-			
-			db.addMessage(response);
+			if((messageListResponse != null)) {
+				for(MessageEvent messageElement: messageListResponse) {
+					db.addMessage(messageElement);
+				}
+			}
 		} catch (Exception e) {
 			Log.d("postdata", e.getMessage());
 		} finally {
@@ -92,12 +84,11 @@ public class PostMessageTask extends AsyncTask<PostMessage, Void, MessageEvent>{
 		}
 	
 		
-		return response;
+		return messageListResponse;
 	}
 	
 	@Override
-	protected void onPostExecute(MessageEvent message) {
-		progDailog.dismiss();
+	protected void onPostExecute(List<MessageEvent> messageList) {
 	}
 	
 	protected String postdata(String json) {
@@ -121,7 +112,7 @@ public class PostMessageTask extends AsyncTask<PostMessage, Void, MessageEvent>{
              HttpResponse response = httpClient.execute(httpPost);
              StatusLine statusLine = response.getStatusLine();
              int statusCode = statusLine.getStatusCode();
-	         if (statusCode == 200) {
+	         if (statusCode == 201) {
 	                HttpEntity entity = response.getEntity();
 	                InputStream inputStream = entity.getContent();
 	                BufferedReader reader = new BufferedReader(
@@ -135,10 +126,10 @@ public class PostMessageTask extends AsyncTask<PostMessage, Void, MessageEvent>{
 	            
 	            r = stringBuilder.toString();
 	         } else {
-	        	 Toast.makeText(context, "Falha ao postar mensagem", Toast.LENGTH_SHORT).show();
+	        	 
 	         }
                 
-	            Log.d("JSON",r);
+	            Log.d("JSON",r+" "+statusCode);
 	       
 	           
         } catch (Exception e) {
@@ -147,34 +138,36 @@ public class PostMessageTask extends AsyncTask<PostMessage, Void, MessageEvent>{
         return r;
 	}
 	
-	protected MessageEvent confirmSentMessage(String r){
-		MessageEvent messageResponse = new MessageEvent();
+	protected List<MessageEvent> confirmSentMessage(String r){
+		List<MessageEvent> messageListResponse = new ArrayList<MessageEvent>();
 		
 		try {
 	    	JSONObject jsonObject = new JSONObject(r);
-	        JSONArray sentMessagesListResponse = new 
-	            JSONArray(jsonObject.getString("messages"));
-	       
-	        JSONObject jsonMessage = sentMessagesListResponse.getJSONObject(0);
-	        
-	        int usermessageid = jsonMessage.getInt("userMessageId");
-	        int messageid = jsonMessage.getInt("messageid");
-	        int from =  jsonMessage.getInt("from");
-	        int to =  jsonMessage.getInt("to");
-	        String senttime = jsonMessage.getString("senttime");
-	        String message = jsonMessage.getString("message");
-	        String received = jsonMessage.getString("received");
-	       
-	        
-	        messageResponse = new MessageEvent(messageid, usermessageid, from,
-            		to, message, senttime, Boolean.parseBoolean(received));
-	        
-	       
-       } catch (JSONException ex) {
+	        JSONArray sentMessagesListResponse = new JSONArray(jsonObject.getString("messages"));
+	        for(int i = 0; i < sentMessagesListResponse.length(); i++) {
+		        JSONObject jsonMessage = sentMessagesListResponse.getJSONObject(0);
+		        
+		        int usermessageid = jsonMessage.getInt("userMessageId");
+		        int messageid = jsonMessage.getInt("messageid");
+		        int from =  jsonMessage.getInt("from");
+		        int to =  jsonMessage.getInt("to");
+		        String senttime = jsonMessage.getString("senttime");
+		        String message = jsonMessage.getString("message");
+		        String received = jsonMessage.getString("received");
+		       
+		        message = URLDecoder.decode(message, "UTF-8");
+		        
+		       MessageEvent messageResponse = new MessageEvent(messageid, usermessageid, from,
+	            		to, message, senttime, Boolean.parseBoolean(received));
+		       
+		       messageListResponse.add(messageResponse);
+		       
+	        }
+       } catch (Exception ex) {
     	   Log.d("confirmSentMessage", ex.getMessage());
     	   
        }
 		
-		return messageResponse;
+		return messageListResponse;
 	}
 }

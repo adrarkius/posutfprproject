@@ -233,6 +233,35 @@ public class DatabaseHandlerMessage extends SQLiteOpenHelper {
             db.close();
         }
     
+    
+    public List<MessageEvent> getMessagesByMessageId(int messageId) {
+    	  List<MessageEvent> messageList = new ArrayList<MessageEvent>();
+          
+    	  String selectQuery = "SELECT  * FROM " + TABLE_MESSAGEEVENT +" WHERE "+"("+KEY_MESSAGEID+" =" +messageId+")"+" ORDER BY "+KEY_SENTTIME+" ASC";
+    	  
+          SQLiteDatabase db = this.getWritableDatabase();
+          Cursor cursor = db.rawQuery(selectQuery,null);
+   
+          // looping through all rows and adding to list
+          if (cursor.moveToFirst()) {
+              do {
+                  MessageEvent message = new MessageEvent();
+                  message.set_usermessageid(Integer.parseInt(cursor.getString(0)));
+                  message.set_messageid(Integer.parseInt(cursor.getString(1)));
+                  message.set_from(Integer.parseInt(cursor.getString(2)));
+                  message.set_to(Integer.parseInt(cursor.getString(3)));
+                  message.set_message(cursor.getString(4));
+                  message.set_senttime(cursor.getString(5));
+                  message.set_received(Boolean.parseBoolean(cursor.getString(6)));
+          
+                  // Adding contact to list
+                  messageList.add(message);
+              } while (cursor.moveToNext());
+          }
+   
+          // return contact list
+          return messageList;
+    }
      
     /*// Getting messages Count
     public int getMessagesCount() {}

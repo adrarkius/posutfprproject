@@ -11,16 +11,35 @@ import android.widget.Spinner;
 
 public class MainActivity extends Activity{
 	
-	 @Override
+	private Button newUserBtn;
+	
+	
+	
+	@Override
 	    protected void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.activity_main);
 	  
 	        
+	        newUserBtn = (Button) findViewById(R.id.main_newUserBtn);
+	        
+	        newUserBtn.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(MainActivity.this, NewUserActivity.class);
+					
+					startActivity(intent);
+					
+				}
+			});
+	        
 	        final Button button = (Button) findViewById(R.id.but1);
 	        button.setOnClickListener(new View.OnClickListener() {
 				
-	        	 Spinner sp1 = (Spinner) findViewById(R.id.spinner1);
+	        	 
+	        	Spinner sp1 = (Spinner) findViewById(R.id.spinner1);
+	        	
 	        	
 				@Override
 				public void onClick(View arg0) {

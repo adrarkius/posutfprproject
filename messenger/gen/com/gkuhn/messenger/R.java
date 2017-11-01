@@ -175,35 +175,54 @@ public final class R {
         public static final int ic_action_person=0x7f020002;
         public static final int ic_action_refresh=0x7f020003;
         public static final int ic_action_user=0x7f020004;
-        public static final int ic_icon=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int send=0x7f020007;
-        public static final int send_selected=0x7f020008;
-        public static final int textview=0x7f020009;
+        public static final int ic_add_user=0x7f020005;
+        public static final int ic_icon=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int rounded_bg=0x7f020008;
+        public static final int send=0x7f020009;
+        public static final int send_selected=0x7f02000a;
+        public static final int textview=0x7f02000b;
     }
     public static final class id {
-        public static final int but1=0x7f0b0003;
-        public static final int conversa=0x7f0b000b;
-        public static final int delete=0x7f0b000c;
-        public static final int enter_message=0x7f0b0005;
-        public static final int from=0x7f0b0008;
-        public static final int fromMessage=0x7f0b0007;
+        public static final int addChatRoomBtn=0x7f0b0002;
+        public static final int but1=0x7f0b0004;
+        public static final int button=0x7f0b0015;
+        public static final int conversa=0x7f0b001a;
+        public static final int delete=0x7f0b001b;
+        public static final int enter_message=0x7f0b0007;
+        public static final int from=0x7f0b0017;
+        public static final int fromMessage=0x7f0b0016;
         public static final int lstView=0x7f0b0001;
-        public static final int message=0x7f0b0009;
-        public static final int rodape=0x7f0b0004;
-        public static final int send_button=0x7f0b0006;
-        public static final int senttime=0x7f0b000a;
-        public static final int spinner1=0x7f0b0002;
+        public static final int main_newUserBtn=0x7f0b0005;
+        public static final int message=0x7f0b0018;
+        public static final int newUser_button_register=0x7f0b0012;
+        public static final int newUser_txtView_message=0x7f0b0011;
+        public static final int newuser_body=0x7f0b000a;
+        public static final int newuser_edtTxt_confirmuserpassword=0x7f0b0010;
+        public static final int newuser_edtTxt_username=0x7f0b000c;
+        public static final int newuser_edtTxt_userpassword=0x7f0b000e;
+        public static final int newuser_header=0x7f0b0009;
+        public static final int newuser_txtView_userconfirmpassword=0x7f0b000f;
+        public static final int newuser_txtView_username=0x7f0b000b;
+        public static final int newuser_txtView_userpassword=0x7f0b000d;
+        public static final int rodape=0x7f0b0006;
+        public static final int send_button=0x7f0b0008;
+        public static final int senttime=0x7f0b0019;
+        public static final int spinner=0x7f0b0014;
+        public static final int spinner1=0x7f0b0003;
+        public static final int txtViewEscolhaUsuario=0x7f0b0013;
         public static final int userId=0x7f0b0000;
     }
     public static final class layout {
         public static final int activity_chatroom=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int activity_messenger=0x7f030002;
-        public static final int left=0x7f030003;
-        public static final int list_item=0x7f030004;
-        public static final int list_item_chatrooms=0x7f030005;
-        public static final int right=0x7f030006;
+        public static final int activity_newuser=0x7f030003;
+        public static final int dialog_newroom=0x7f030004;
+        public static final int left=0x7f030005;
+        public static final int list_item=0x7f030006;
+        public static final int list_item_chatrooms=0x7f030007;
+        public static final int right=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -216,7 +235,12 @@ public final class R {
         public static final int hello_world=0x7f070002;
         public static final int insira_mensagem=0x7f070007;
         public static final int logar=0x7f070004;
+        public static final int new_user_str=0x7f070008;
         public static final int spinner_prompt=0x7f070005;
+        public static final int user_confirmpassword_str=0x7f07000b;
+        public static final int user_name_str=0x7f070009;
+        public static final int user_password_str=0x7f07000a;
+        public static final int user_register_str=0x7f07000c;
     }
     public static final class style {
         /** 

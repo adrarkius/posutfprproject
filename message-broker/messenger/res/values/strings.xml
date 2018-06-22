@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PosUTFPRApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="from_text">From:</string>
+    <string name="logar">Logar</string>
+    <string name="spinner_prompt">Select a number:</string>
+    <string name="conversa_com">Conversa com </string>
+    <string name="insira_mensagem">Escreva uma mensagem</string>
+    <string name="new_user_str">Novo Usuário</string>
+    <string name="user_name_str">Nome do usuário:</string>
+    <string name="user_password_str">Senha:</string>
+    <string name="user_confirmpassword_str">Confirmar Senha:</string>
+    <string name="user_register_str">Registrar</string>
+      
+    
+    
+    <string-array name="number_arrays">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+</resources>
